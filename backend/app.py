@@ -22,5 +22,20 @@ def generate_stream(query):
         yield f'{{"response": "{word}"}}\n'
         time.sleep(0.2)
 
+@app.route("/documents", methods=["GET"])
+def documents():
+    return jsonify({
+        "documents": [
+            {
+                "title": "Doc 1",
+                "content": "Questo è l'inizio di un paragrafo..."
+            },
+            {
+                "title": "Doc 2",
+                "content": "Questo è l'inizio di un altro paragraf o..."
+            }
+        ]
+    })
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
