@@ -3,8 +3,7 @@ export type Ask = {
 };
 
 export type Answer = {
-  query: string;
-  answer: string;
+  response: string;
 };
 
 export type FactCheck = {

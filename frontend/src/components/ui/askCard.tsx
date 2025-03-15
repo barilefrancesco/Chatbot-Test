@@ -3,6 +3,7 @@ import { ArrowUp, LoaderPinwheel } from "lucide-react";
 import { Button } from "./button";
 import { Input } from "./input";
 import { useState } from "react";
+import { FactChecking } from "./factChecking";
 
 export default function AskCard() {
   const [query, setQuery] = useState("");
@@ -16,7 +17,7 @@ export default function AskCard() {
 
     try {
       setIsLoading(true);
-      
+
       const currentQuery = query;
       setQueries((prev) => [...prev, currentQuery]);
       setOutputs((prev) => [...prev, ""]);
@@ -40,9 +41,9 @@ export default function AskCard() {
           if (done) break;
 
           const chunk = new TextDecoder().decode(value);
-          console.log("Received chunk:", chunk);
+          const cleanedChunk = chunk.replace(/data:\s*/g, "");
 
-          accumulatedText += chunk;
+          accumulatedText += cleanedChunk;
 
           setOutputs((prev) => {
             const updated = [...prev];
@@ -58,7 +59,13 @@ export default function AskCard() {
   };
 
   return (
-    <div className="h-[(100dvh - 30px)] mx-auto flex w-full max-w-[1140px] flex-1 flex-col items-center justify-between gap-2 p-4">
+    <div
+      className="mx-auto flex h-full w-full max-w-[1140px] flex-1 flex-col items-center justify-between gap-2 p-4"
+      style={{
+        maxHeight: "calc(100svh - 50px)",
+      }}
+    >
+      {/* chat: mostra le conversazioni */}
       <div className="w-full flex-1 overflow-auto">
         <div className="flex flex-col gap-4">
           {queries.map((queryText, i) => (
@@ -68,18 +75,22 @@ export default function AskCard() {
             >
               {/* Query a destra */}
               <div className="ml-auto w-fit max-w-[80%] rounded-2xl bg-zinc-700 p-4 text-right">
-                {queryText}
+                <p>{queryText}</p>
               </div>
               {/* Risposta a sinistra */}
               {outputs[i] && (
                 <div className="w-fit max-w-[80%] rounded-2xl bg-zinc-800 p-4">
-                  {outputs[i]}
+                  <p>{outputs[i]}</p>
+                  <div className="flex justify-end">
+                    <FactChecking />
+                  </div>
                 </div>
               )}
             </div>
           ))}
         </div>
       </div>
+      {/* form: scrivi una domanda */}
       <div className="flex w-full max-w-xl flex-col gap-2 rounded-2xl bg-zinc-800 p-4">
         <form onSubmit={onSubmit}>
           <Input
