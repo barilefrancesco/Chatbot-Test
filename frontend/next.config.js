@@ -11,7 +11,9 @@ const config = {
         return [
         {
             source: '/api/:path*',
-            destination: 'http://localhost:5000/:path*',
+            destination: process.env.NODE_ENV === "production"
+                ? "http://backend:5000/:path*"
+                : "http://localhost:5000/:path*",
         },
         ];
     },
