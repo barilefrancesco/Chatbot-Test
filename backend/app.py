@@ -9,18 +9,14 @@ def generate():
     data = request.get_json()
     query = data.get("query", "")
 
-    return Response(
-        stream_with_context(generate_stream(query)),
-        mimetype="application/json"
-    )
+    def generate_stream():
+        response_text = f"Certo che conosco Datapizza, è una realtà fighissima! Lascia che ti spieghi come passare i loro test tecnici: per prima cosa devi..."
+        words = response_text.split()
+        for word in words:
+            yield f"data: {word}\n\n"
+            time.sleep(0.2)
 
-def generate_stream(query):
-    response_text = f"Certo che conosco Datapizza, è una realtà fighissima! Lascia che ti spieghi come passare i loro test tecnici: per prima cosa devi..."
-    
-    words = response_text.split()
-    for word in words:
-        yield f'{{"response": "{word}"}}\n'
-        time.sleep(0.2)
+    return Response(generate_stream(), content_type='text/event-stream')
 
 @app.route("/documents", methods=["GET"])
 def documents():
