@@ -6,7 +6,15 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
-    output: "standalone"
+    output: "standalone",
+    async rewrites() {
+        return [
+        {
+            source: '/api/:path*',
+            destination: 'http://localhost:5000/:path*',
+        },
+        ];
+    },
 };
 
 export default config;
