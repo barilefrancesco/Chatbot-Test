@@ -84,11 +84,14 @@ export default function AskCard() {
 
   return (
     <div
-      className="mx-auto flex h-full w-full max-w-[1140px] flex-1 flex-col items-center justify-between gap-2 p-4"
+      className="flex w-full flex-col items-center"
+      style={{
+        maxHeight: "calc(100svh - 50px)",
+      }}
     >
       {/* chat: mostra le conversazioni */}
-      <div className="w-full flex-1 overflow-auto">
-        <div className="flex flex-col gap-4">
+      <div className="w-screen flex-1 overflow-y-auto px-2 py-4 lg:px-0">
+        <div className="ml-auto mr-auto flex max-w-2xl flex-col gap-4">
           {queries.map((queryText, i) => (
             <div
               key={`conversation-${i}`}
@@ -100,7 +103,7 @@ export default function AskCard() {
               </div>
               {/* Risposta a sinistra */}
               {outputs[i] && (
-                <div className="w-fit max-w-[80%] rounded-2xl bg-zinc-800 p-4">
+                <div className="flex w-fit max-w-[80%] flex-col rounded-2xl bg-zinc-800 p-4 gap-2">
                   <p>{outputs[i]}</p>
                   <div className="flex justify-end">
                     <FactChecking />
@@ -112,27 +115,29 @@ export default function AskCard() {
         </div>
       </div>
       {/* form: scrivi una domanda */}
-      <div className="flex w-full max-w-xl flex-col gap-2 rounded-2xl bg-zinc-800 p-4">
-        <form onSubmit={onSubmit}>
-          <Input
-            placeholder="Scrivi la tua domanda"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <div className="mt-2 flex items-center justify-end">
-            <Button
-              className="rounded-full bg-zinc-950 p-3 text-white"
-              type="submit"
-              disabled={!query.trim() || isLoading}
-            >
-              {isLoading ? (
-                <LoaderPinwheel className="h-10 w-10 animate-spin" />
-              ) : (
-                <ArrowUp className="h-10 w-10" />
-              )}
-            </Button>
-          </div>
-        </form>
+      <div className="flex w-full justify-center md:pb-2">
+        <div className="flex w-full max-w-3xl flex-col gap-2 bg-zinc-800 p-4 md:rounded-2xl">
+          <form onSubmit={onSubmit}>
+            <Input
+              placeholder="Scrivi la tua domanda"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <div className="mt-2 flex items-center justify-end">
+              <Button
+                className="rounded-full bg-zinc-950 p-3 text-white"
+                type="submit"
+                disabled={!query.trim() || isLoading}
+              >
+                {isLoading ? (
+                  <LoaderPinwheel className="h-10 w-10 animate-spin" />
+                ) : (
+                  <ArrowUp className="h-10 w-10" />
+                )}
+              </Button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

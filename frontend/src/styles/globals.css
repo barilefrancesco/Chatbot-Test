@@ -66,3 +66,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+::-webkit-scrollbar {
+  width: 8px;
+  /* Larghezza della scrollbar verticale */
+  height: 8px;
+  /* Altezza della scrollbar orizzontale */
+  border: 0px solid #e6ecf8;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  /* https: //tailwindcss.com/docs/colors */
+  background-color: oklch(0.141 0.005 285.823);
+  opacity: 0.5;
+}
