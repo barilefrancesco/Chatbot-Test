@@ -1,22 +1,46 @@
 from flask import Flask, request, Response, stream_with_context, jsonify
 import time
-
+import sys
+import asyncio
 
 app = Flask(__name__)
 
+cache = {}
+lock = asyncio.Lock() # https://docs.python.org/3/library/asyncio-sync.html#asyncio.Lock
+
+async def get_cached_response(query):
+    async with lock:
+        await asyncio.sleep(2)
+        return cache.get(query)
+
+async def set_cached_response(query, response):
+    async with lock:
+        await asyncio.sleep(2)
+        cache[query] = response
+
 @app.route("/generate", methods=["POST"])
-def generate():
+async def generate():
     data = request.get_json()
     query = data.get("query", "")
 
+    # print(cache)
+
+    cached_response = await get_cached_response(query)
+    if cached_response:
+        return jsonify({"response": cached_response, "cached": True})
+
+    response_text = f"Certo che conosco Datapizza, è una realtà fighissima! Lascia che ti spieghi come passare i loro test tecnici: per prima cosa devi..."
+    
+    await set_cached_response(query, response_text)
+
     def generate_stream():
-        response_text = f"Certo che conosco Datapizza, è una realtà fighissima! Lascia che ti spieghi come passare i loro test tecnici: per prima cosa devi..."
         words = response_text.split()
         for word in words:
-            yield f"data: {word}\n\n"
+            yield f"{word} "
+            sys.stdout.flush()
             time.sleep(0.2)
 
-    return Response(generate_stream(), content_type='text/event-stream')
+    return Response(generate_stream(), content_type="text/plain")
 
 @app.route("/documents", methods=["GET"])
 def documents():

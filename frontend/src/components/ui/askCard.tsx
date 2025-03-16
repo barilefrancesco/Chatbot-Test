@@ -17,8 +17,8 @@ export default function AskCard() {
 
     try {
       setIsLoading(true);
-
       const currentQuery = query;
+      const outputIndex = outputs.length;
       setQueries((prev) => [...prev, currentQuery]);
       setOutputs((prev) => [...prev, ""]);
       setQuery("");
@@ -31,19 +31,42 @@ export default function AskCard() {
         body: JSON.stringify({ query: currentQuery }),
       });
 
-      const reader = response.body?.getReader();
-      if (reader) {
-        const outputIndex = outputs.length;
+      const contentType = response.headers.get("Content-Type");
+      if (contentType?.includes("application/json")) {
+        const data = (await response.json()) as {
+          response: string;
+          cached: boolean;
+        };
+        // console.log(data);
+        setOutputs((prev) => {
+          const updated = [...prev];
+          updated[outputIndex] = data.response;
+          return updated;
+        });
+      } else {
+        const reader = response.body?.getReader();
+        if (!reader) throw new Error("Reader non disponibile");
         let accumulatedText = "";
 
+        const decoder = new TextDecoder();
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
 
-          const chunk = new TextDecoder().decode(value);
-          const cleanedChunk = chunk.replace(/data:\s*/g, "");
+          const chunk = decoder.decode(value, { stream: true });
+          /*
+          console.log(chunk); // Errore: Viene direttamente mostrato tutto il testo
 
-          accumulatedText += cleanedChunk;
+          Test Backend andato a buon fine:            
+            curl -N -X POST -H "Content-Type: application/json" -d '{"query": "test"}' http://localhost:5000/generate
+          Note:
+            Le parole si visualizzano una dopo l'altra.
+
+            Molto probabilmente il problema è nella gestione dei stream lato frontend con next.js
+            Source: https://sdk.vercel.ai/docs/reference/ai-sdk-core/stream-text#streamtext
+          */
+
+          accumulatedText += chunk;
 
           setOutputs((prev) => {
             const updated = [...prev];
@@ -52,18 +75,16 @@ export default function AskCard() {
           });
         }
       }
-      setIsLoading(false);
     } catch (error) {
-      console.error(error);
+      console.error("Errore nel fetch:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div
       className="mx-auto flex h-full w-full max-w-[1140px] flex-1 flex-col items-center justify-between gap-2 p-4"
-      style={{
-        maxHeight: "calc(100svh - 50px)",
-      }}
     >
       {/* chat: mostra le conversazioni */}
       <div className="w-full flex-1 overflow-auto">
