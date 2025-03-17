@@ -26,3 +26,9 @@ cd Datapizza
 docker compose up --build -d
 ```
 
+Nota: La versione che viene eseguita è in debug mode.
+
+Grazie per avermi dato l'opportunità di cimentarmi un questo piccolo progettino.
+È stato molto divertente. Inolte, ho avuto modo di cimentarmi nello streaming di dati che non mi era mai capitato di gestire su Next.js e Flask.
+
+A presto!
