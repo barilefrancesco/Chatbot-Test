@@ -55,15 +55,10 @@ export default function AskCard() {
 
           const chunk = decoder.decode(value, { stream: true });
           /*
-          console.log(chunk); // Errore: Viene direttamente mostrato tutto il testo
+          console.log(chunk);
 
           Test Backend andato a buon fine:            
             curl -N -X POST -H "Content-Type: application/json" -d '{"query": "test"}' http://localhost:5000/generate
-          Note:
-            Le parole si visualizzano una dopo l'altra.
-
-            Molto probabilmente il problema è nella gestione dei stream lato frontend con next.js
-            Source: https://sdk.vercel.ai/docs/reference/ai-sdk-core/stream-text#streamtext
           */
 
           accumulatedText += chunk;
