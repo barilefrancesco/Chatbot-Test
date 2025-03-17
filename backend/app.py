@@ -40,7 +40,17 @@ async def generate():
             sys.stdout.flush()
             time.sleep(0.2)
 
-    return Response(generate_stream(), content_type="text/plain")
+    return Response(
+            generate_stream(),
+            content_type="text/plain",
+            headers={
+                'Cache-Control': 'no-cache, no-transform',
+                'X-Accel-Buffering': 'no',
+                'Connection': 'keep-alive',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Content-Type',
+            }
+        )
 
 @app.route("/documents", methods=["GET"])
 def documents():
