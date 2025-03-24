@@ -1,4 +1,4 @@
-<h1 align="center">Datapizza Chatbot Test</h1>
+<h1 align="center">Chatbot Test</h1>
 <p align="center">
   Chatbot Built With Next.js and Flask
 </p>
@@ -27,8 +27,3 @@ docker compose up --build -d
 ```
 
 Nota: La versione che viene eseguita è in debug mode.
-
-Grazie per avermi dato l'opportunità di cimentarmi un questo piccolo progettino.
-È stato molto divertente. Inolte, ho avuto modo di provare lo streaming di dati che non mi era mai capitato di gestire su Next.js e Flask.
-
-A presto!
