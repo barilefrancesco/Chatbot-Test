@@ -17,8 +17,8 @@
 
 ```bash
 # Clone the repo
-git clone https://github.com/barilefrancesco/Datapizza.git
-cd Datapizza
+git clone https://github.com/barilefrancesco/Chatbot-Test.git
+cd Chatbot-Test
 ```
 
 ```bash

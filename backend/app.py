@@ -29,7 +29,7 @@ async def generate():
     if cached_response:
         return jsonify({"response": cached_response, "cached": True})
 
-    response_text = f"Certo che conosco Datapizza, è una realtà fighissima! Lascia che ti spieghi come passare i loro test tecnici: per prima cosa devi..."
+    response_text = f"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fermentum leo et lectus imperdiet habitant donec vivamus lectus parturient suscipit."
     
     await set_cached_response(query, response_text)
 
